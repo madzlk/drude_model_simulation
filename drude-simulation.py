@@ -1,6 +1,8 @@
 import pygame
 import random
 import math
+import dearpygui.dearpygui as dpg
+
 
 #slider do zmiany stałych w czasie rzeczywistym, maibi python_widget
 #https://pygamewidgets.readthedocs.io/en/stable/widgets/slider/#slider
@@ -56,6 +58,29 @@ electron = {
 
 thermal_velocity = math.sqrt(3*BOLTZAMAN*TEMPERATURE/ELECTRON_MASS)
 
+# Variables to make adjustable
+current_electric_field = ELECTRIC_FIELD
+current_mean_free_time = MEAN_FREE_TIME
+current_temperature = TEMPERATURE
+
+# Update thermal velocity based on temperature
+def update_thermal_velocity():
+    global thermal_velocity
+    thermal_velocity = math.sqrt(3 * BOLTZAMAN * current_temperature / ELECTRON_MASS)
+
+# Dear PyGui setup
+dpg.create_context()
+dpg.create_viewport(title="Drude Model Controls", width=400, height=300)
+
+with dpg.window(label="Controls", width=400, height=300):
+    dpg.add_slider_float(label="Electric Field (V/m)", default_value=ELECTRIC_FIELD, min_value=1e3, max_value=1e6, callback=lambda s, d: globals().update(current_electric_field=d))
+    dpg.add_slider_float(label="Mean Free Time (s)", default_value=MEAN_FREE_TIME, min_value=1e-16, max_value=1e-13, callback=lambda s, d: globals().update(current_mean_free_time=d))
+    dpg.add_slider_float(label="Temperature (K)", default_value=TEMPERATURE, min_value=100, max_value=500, callback=lambda s, d: globals().update(current_temperature=d) or update_thermal_velocity())
+
+dpg.setup_dearpygui()
+dpg.show_viewport()
+
+
 running = True
 while running:
     screen.fill((0, 0, 0))  # co klatka czyścimy ekran, bo inaczej zosałby obraz elektrony z poprzednije iteracji
@@ -65,14 +90,14 @@ while running:
             running = False
 
     # an electron will have a velocity v = v0 - eEt/m
-    electron["velocity"][0] += ELECTRON_CHARGE * ELECTRIC_FIELD * TIME_STEP / ELECTRON_MASS # dodajemy, a nie odejmujemy bo nas nie obchodzi kierunek
+    electron["velocity"][0] += ELECTRON_CHARGE * current_electric_field * TIME_STEP / ELECTRON_MASS # dodajemy, a nie odejmujemy bo nas nie obchodzi kierunek
     electron["velocity"][1] += 0 # zakładamy, że siła elktryczna działa w poziomie, więc w pionie nic się nie zmienia
 
     electron["position"][0] += electron["velocity"][0] * TIME_STEP * SCALE
     electron["position"][1] += electron["velocity"][1] * TIME_STEP * SCALE
 
     # probability of having a collision in infinitesimal time interval dt is dt/tau
-    if random.random() < TIME_STEP / MEAN_FREE_TIME:
+    if random.random() < TIME_STEP / current_mean_free_time:
         electron["velocity"] = [random.uniform(-thermal_velocity, thermal_velocity), random.uniform(-thermal_velocity, thermal_velocity)]
 
     # żeby eleektron nie uciekł z erkanu
@@ -83,4 +108,8 @@ while running:
     pygame.display.flip()
     clock.tick(60)
 
+    # Render Dear PyGui frame
+    dpg.render_dearpygui_frame()
+
+dpg.destroy_context()
 pygame.quit()
