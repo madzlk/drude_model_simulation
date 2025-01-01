@@ -1,11 +1,9 @@
 import argparse
-import sys
 from vpython import *
 from random import uniform
 import math
 import threading
 import random
-import numpy as np
 
 # ──────────────────────────────────────────────────────────────────────────────
 # PHYSICAL CONSTANTS AND PARAMETERS

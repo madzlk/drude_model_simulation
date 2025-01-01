@@ -1,7 +1,7 @@
 Drude Model Simulation
 ================================
 
-This project provides a sophisticated simulation of electron dynamics within an applied electric field, grounded in the theoretical framework of the Drude model. By leveraging interactive visualizations and user-adjustable parameters, it facilitates an in-depth exploration of the interplay between scattering events and electric forces governing electron motion.
+This project provides simulation of electron dynamics within an applied electric field, grounded in the theoretical framework of the Drude model.
 
 ## Features
 
@@ -37,35 +37,17 @@ python drude_model_sim.py
 ### Command-Line Configuration
 
 * `--num-electrons`: Defines the quantity of electrons to simulate (default: 30).
-* `--metal`: Activates simulation within a bounded metal environment.
-* `--infinite-metal`: Enables simulation within an unbounded, periodic metallic environment.
 
 Example usage:
 
-python drude_model_sim.py --num-electrons 50 --metal
+python drude_model_sim.py --num-electrons 50
 
 ### Interactive Controls
 
-* **Electric Field Strength**: Adjustable in volts per meter via an intuitive slider.
+* **Electric Field Strength**: Adjustable in volts per meter via slider.
 * **Scattering Time**: Modifiable timescale for electron scattering events, expressed in seconds.
 
 The parameters can be dynamically altered through the user interface during runtime.
-
-## Simulation Details
-
-### Drude Model Framework
-
-Captures the essential dynamics of electron acceleration and stochastic scattering due to external forces.
-
-### Boundary Conditions
-
-* **Finite Metal**: Electrons reflect elastically at the boundaries.
-* **Infinite Metal**: Electrons exhibit periodic boundary conditions, reappearing on the opposite edge upon exiting.
-
-### Visualization Outputs
-
-* **X vs Time**: A real-time plot tracking the average x-coordinate.
-* **Y vs Time**: A corresponding plot for the y-coordinate.
 
 ## Simulation Control
 
