@@ -51,7 +51,7 @@ The parameters can be dynamically altered through the user interface during runt
 
 ## Simulation Control
 
-To terminate the simulation gracefully, input `q` into the terminal.
+To terminate the simulation gracefully, input `q` into the terminal. Eventually just close the localhost site, the experience is hosted on.
 
 ## Outputs
 
