@@ -1,58 +1,63 @@
-Drude Model Simulation
-================================
+# Symulacja modelu Drudego
 
-This project provides simulation of electron dynamics within an applied electric field, grounded in the theoretical framework of the Drude model.
+Projekt symuluje ruch elektronów w nieskończonym metalu pod wpływem pola elektrycznego, zgodnie z założeniami modelu Drudego.
 
-## Features
+## Funkcjonalność
 
-* **Dynamic Simulation**: Real-time visualization of electron trajectories and statistical behavior under varying physical conditions.
-* **Configurable Parameters**: Interactive sliders enable fine-tuned control over the electric field intensity and scattering timescale.
-* **Comprehensive Graphical Output**: Generates plots illustrating the temporal evolution of average electron positions in both the x and y dimensions.
-* **Command-Line Flexibility**: Supports argument-based customization, including the number of simulated electrons and the environmental constraints.
+* **Dynamiczna symulacja**: wizualizacja trajektorii ruchu elektronów w czasie rzeczywistym pod wpływem różnych warunków fizycznych.
+* **Konfigurowalne parametry**: inteaktywne suwaki umożliwiają precyzyjną regulację wartości natężenia pola elektrycznego i czasu relaksacji.
+* **Kompleksowe grafy**: generowane są wykresy, ilustrujące średnie zmiany pozycji w wymiarach x i y chmury elektronów w czasie.
+* **Argumenty wiersza poleceń**: łatwe dostosowywanie ilości elektronów przez argumenty wiersza poleceń.
 
-## Requirements
+## Wymagania
 
-### Python Version
+### Wersja Pythona
 Python 3.x
 
-### Dependencies
+### Zależności
 
 * `vpython`
-* Standard libraries: `math`, `argparse`, `threading`
+* Biblioteki standardowe: `math`, `argparse`, `threading`
 
-### Installation
+### Instalacja
 
-Install the necessary Python dependencies with:
+Aby zainstalować wymagane pakiety należy skorzystać z komendy:
 
-pip install vpython
+`pip install -r requirements.txt`
 
-## Usage
+## Instrukcja użycia
 
-### Executing the Simulation
+### Uruchamianie symulacji
 
-Run the script using the following command:
+Uruchom program za pomocą komendy:
 
-python drude_model_sim.py
+`python drude_model_sim.py`
 
-### Command-Line Configuration
+### Argumenty wiersza poleceń
 
-* `--num-electrons`: Defines the quantity of electrons to simulate (default: 30).
+* `--num-electrons`: Definiuje liczbę elektronów w oknie symulacji (wartość domyślna: 30)
 
-Example usage:
+Przykład zastosowania:
 
-python drude_model_sim.py --num-electrons 50
+`python drude_model_sim.py --num-electrons 50`
 
-### Interactive Controls
+### Interaktywna kontrola
+Za pomocą suwaków można dostosować wartości:
+* **Natężenia pola elektrycznego** \[$\frac{V}{m}$\]
+* **Czasu relaksacji** \[$s$\], czyli średniego czasu między zderzeniami
 
-* **Electric Field Strength**: Adjustable in volts per meter via slider.
-* **Scattering Time**: Modifiable timescale for electron scattering events, expressed in seconds.
+Parametry mogą być dostosowywane w dowolnym momencie czasu wykonywania programu.
 
-The parameters can be dynamically altered through the user interface during runtime.
+Zmiany tych wartości są dynamicznie odwzorowywane w wartości prędkości dryfu, liczonej według wzoru:
 
-## Simulation Control
+$v_d = \frac{\tau q E}{m} $, gdzie
+* $\tau$ - czas relaksacji
+* $q$ - ładunek elektronu
+* $E$ - wartość natężenia pola elektrycznego
+* $m$ - masa elektronu
 
-To terminate the simulation gracefully, input `q` into the terminal. Eventually just close the localhost site, the experience is hosted on.
+## Kontrola Symulacji
+Aby zakończyć symulację w sposób kontrolowany, wprowadź `q` w terminalu. Następnie można w przeglądarce zamknąć okno localhost, gdzie hostowana jest symulacja.
 
-## Outputs
-
-Observe electrons responding to the combined influence of electric fields and scattering processes. Monitor plots of positional averages over time. Displays real-time updates regarding simulation parameters and settings.
+## Wyniki
+Program umożliwia badanie reakcji elektronów na łączony wpływ pola elektrycznego i procesów zderzania elektronów z jonami sieci krystalicznej. Aby umożliwić głębszą analizę, wyświetlane są również wykresy średnich pozycji w czasie. Aktualizacje dotyczące parametrów symulacji i ustawień są wyświetlane w czasie rzeczywistym.
