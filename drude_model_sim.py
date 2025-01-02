@@ -4,6 +4,7 @@ from random import uniform
 import math
 import threading
 import random
+import time
 
 # ──────────────────────────────────────────────────────────────────────────────
 # PHYSICAL CONSTANTS AND PARAMETERS
@@ -25,11 +26,25 @@ ELECTRIC_FIELD_SCALE = 1e6
 
 scene.title = "<h1>Drude Model Simulation</h1>"
 
+scene.append_to_caption("\n<b>Drift velocity: </b>")
+drift_velocity_display = wtext(text='0')
+
+def update_drift_velocity(new_velocity):
+    drift_velocity_display.text = '{:.2e}'.format(new_velocity)
+
+scene.append_to_caption("\n<hr />")
+
 scene.append_to_caption("\n<b>Simulation Controls:</b>\n\n\n")
 
 scene.append_to_caption("Electric field: ")
 def update_electric_field(slider):
     electric_field_display.text = '{:1.4g}'.format(slider.value)
+
+    # Recalculate theoretical drift velocity
+    drift_velocity = calculate_drift_velocity(
+        slider.value * ELECTRIC_FIELD_SCALE, scattering_time
+    )
+    update_drift_velocity(drift_velocity)
 
 # Increase the range drastically for better visibility
 electric_field_slider = slider(min=-1, max=1, value=0, length=500, bind=update_electric_field, left=50)
@@ -40,10 +55,43 @@ scene.append_to_caption("Scattering time: ")
 def update_scattering_time(slider):
     scattering_time_display.text = '{:1.4g}'.format(slider.value)
 
+    # Recalculate theoretical drift velocity
+    drift_velocity = calculate_drift_velocity(
+        electric_field, slider.value * SCATTERING_TIME_SCALE
+    )
+    update_drift_velocity(drift_velocity)
+
 
 scattering_time_slider = slider(min=0.01 , max=21, value=2, length=220, bind=update_scattering_time, left=50)
 scattering_time_display = wtext(text='{:1.4g}'.format(scattering_time_slider.value))
-scene.append_to_caption(' s * 10^-14\n')
+scene.append_to_caption(' s * 10^-14\n\n\n')
+
+def reset_animation():
+    global electrons, avg_position, stop_simulation, t
+    stop_simulation = True
+    time.sleep(0.2)
+    t = 0
+    x_position_plot.delete()
+    y_position_plot.delete()
+    z_marker_plot.delete()
+
+    avg_position = vector(0, 0, 0)
+    # scene.camera.pos = vector(0, 0, 0)
+    # scene.camera.axis = vector(0, -1, -2)
+
+    # Clear trails
+    for electron in electrons:
+        electron.body.clear_trail()  # Clears the existing trail
+        electron.body.make_trail = False  # Disable trail temporarily
+
+    # Reinitialize electrons
+    electrons.clear()
+    electrons = [Electron(vector(0, 0, 0)) for _ in range(num_electrons)]
+
+    stop_simulation = False
+
+reset_button = button(bind=reset_animation, text="Reset")
+
 
 scene.append_to_caption(
     "<p style='font-size: 16px; color: gray;'>"
@@ -55,6 +103,7 @@ scene.append_to_caption(
 x_position_plot = gcurve(color=color.green, label="Average X Position vs Time")
 y_position_plot = gcurve(color=color.red, label="Average Y Position vs Time")
 z_marker_plot   = gcurve(color=color.black, label="Z Marker")
+
 
 # ──────────────────────────────────────────────────────────────────────────────
 # PARSING COMMAND LINE ARGUMENTS
@@ -118,6 +167,10 @@ def move_electrons(electrons):
 
     return average_position / len(electrons)
 
+
+def calculate_drift_velocity(electric_field, tau):
+    return (ELECTRON_CHARGE * electric_field * tau) / ELECTRON_MASS
+
 # ──────────────────────────────────────────────────────────────────────────────
 # CREATE ELECTRONS
 # ──────────────────────────────────────────────────────────────────────────────
@@ -133,12 +186,14 @@ t = 0
 def monitor_user_input():
     while True:
         if input().strip().lower() == 'q':
-            global stop_simulation
+            global stop_simulation, exit_program
             stop_simulation = True
+            exit_program = True
             print("Received 'q'. Stopping simulation.")
             break
 
 stop_simulation = False
+exit_program = False
 input_thread = threading.Thread(target=monitor_user_input, daemon=True)
 input_thread.start()
 
@@ -146,9 +201,9 @@ input_thread.start()
 # MAIN LOOP
 # ──────────────────────────────────────────────────────────────────────────────
 
+# while not exit_program:
+#     rate(5000)
 while not stop_simulation:
-    rate(5000)
-
     scattering_time = scattering_time_slider.value * SCATTERING_TIME_SCALE
     electric_field  = electric_field_slider.value * ELECTRIC_FIELD_SCALE
 
@@ -159,5 +214,3 @@ while not stop_simulation:
     x_position_plot.plot(pos=(t, avg_position.x))
     y_position_plot.plot(pos=(t, avg_position.y))
     z_marker_plot.plot(pos=(t, avg_position.z))
-
-print("Simulation terminated.")
