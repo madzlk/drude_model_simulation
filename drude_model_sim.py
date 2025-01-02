@@ -201,16 +201,16 @@ input_thread.start()
 # MAIN LOOP
 # ──────────────────────────────────────────────────────────────────────────────
 
-# while not exit_program:
-#     rate(5000)
-while not stop_simulation:
-    scattering_time = scattering_time_slider.value * SCATTERING_TIME_SCALE
-    electric_field  = electric_field_slider.value * ELECTRIC_FIELD_SCALE
+while not exit_program:
+    rate(5000)
+    while not stop_simulation:
+        scattering_time = scattering_time_slider.value * SCATTERING_TIME_SCALE
+        electric_field  = electric_field_slider.value * ELECTRIC_FIELD_SCALE
 
-    avg_position = move_electrons(electrons)
-    t += TIME_STEP
+        avg_position = move_electrons(electrons)
+        t += TIME_STEP
 
-    # Plot the average (unscaled) position
-    x_position_plot.plot(pos=(t, avg_position.x))
-    y_position_plot.plot(pos=(t, avg_position.y))
-    z_marker_plot.plot(pos=(t, avg_position.z))
+        # Plot the average (unscaled) position
+        x_position_plot.plot(pos=(t, avg_position.x))
+        y_position_plot.plot(pos=(t, avg_position.y))
+        z_marker_plot.plot(pos=(t, avg_position.z))
