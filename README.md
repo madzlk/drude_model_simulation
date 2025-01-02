@@ -43,8 +43,8 @@ Przykład zastosowania:
 
 ### Interaktywna kontrola
 Za pomocą suwaków można dostosować wartości:
-* **Natężenia pola elektrycznego** \[$\frac{V}{m}$\]
-* **Czasu relaksacji** \[$s$\], czyli średniego czasu między zderzeniami
+* **Natężenia pola elektrycznego** \[ $\frac{V}{m}$ \]
+* **Czasu relaksacji** \[ $s$ \], czyli średniego czasu między zderzeniami
 
 Parametry mogą być dostosowywane w dowolnym momencie czasu wykonywania programu.
 
