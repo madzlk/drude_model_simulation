@@ -76,13 +76,11 @@ def reset_animation():
     z_marker_plot.delete()
 
     avg_position = vector(0, 0, 0)
-    # scene.camera.pos = vector(0, 0, 0)
-    # scene.camera.axis = vector(0, -1, -2)
 
     # Clear trails
     for electron in electrons:
-        electron.body.clear_trail()  # Clears the existing trail
-        electron.body.make_trail = False  # Disable trail temporarily
+        electron.body.clear_trail()
+        electron.body.make_trail = False
 
     # Reinitialize electrons
     electrons.clear()

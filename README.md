@@ -61,3 +61,8 @@ Aby zakończyć symulację w sposób kontrolowany, wprowadź `q` w terminalu. Na
 
 ## Wyniki
 Program umożliwia badanie reakcji elektronów na łączony wpływ pola elektrycznego i procesów zderzania elektronów z jonami sieci krystalicznej. Aby umożliwić głębszą analizę, wyświetlane są również wykresy średnich pozycji w czasie. Aktualizacje dotyczące parametrów symulacji i ustawień są wyświetlane w czasie rzeczywistym.
+
+## Wykorzystanie generatywnej sztucznej inteligencji
+W trakcie tworzenia projektu wykorzystany był model językowy *gpt-4o* w celu:
+* poprawienia czytelności kodu: zostały dodane komentarze oraz zmienione nazwy zmiennych na bardziej czytelne;
+* 
